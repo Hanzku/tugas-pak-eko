@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  nama      String
+  email     String   @unique
+  password  String
+  role      String   @default("SISWA") // PENGAJAR | SISWA
+  createdAt DateTime @default(now())
+  kelas     Kelas[]
+}
+
+model Kelas {
+  id            String       @id @default(uuid())
+  nama          String
+  deskripsi     String?
+  mataPelajaran String
+  tahunAjaran   String
+  kode          String       @unique
+  pengajarId    String
+  pengajar      User         @relation(fields: [pengajarId], references: [id])
+  createdAt     DateTime     @default(now())
+  materi        Materi[]
+  gambar        Gambar[]
+  tugas         Tugas[]
+  pengumuman    Pengumuman[]
+}
+
+model Materi {
+  id        String   @id @default(uuid())
+  judul     String
+  deskripsi String?
+  fileUrl   String
+  fileName  String
+  fileSize  Int
+  fileType  String
+  kelasId   String
+  kelas     Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Gambar {
+  id        String   @id @default(uuid())
+  judul     String
+  deskripsi String?
+  imageUrl  String
+  fileName  String
+  fileSize  Int
+  kelasId   String
+  kelas     Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Tugas {
+  id        String    @id @default(uuid())
+  judul     String
+  deskripsi String
+  deadline  DateTime?
+  fileUrl   String?
+  fileName  String?
+  kelasId   String
+  kelas     Kelas     @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+}
+
+model Pengumuman {
+  id        String   @id @default(uuid())
+  judul     String
+  isi       String
+  penting   Boolean  @default(false)
+  kelasId   String
+  kelas     Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
