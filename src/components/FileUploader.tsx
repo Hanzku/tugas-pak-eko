@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { formatFileSize, isValidImageFile, isValidDocFile, MAX_IMAGE_SIZE, MAX_DOC_SIZE, cn } from '@/lib/utils';
+import { IconUpload, IconFile, IconCheck } from './icons/DiampuIcons';
 
 interface UploadResult {
   url: string;
@@ -149,7 +150,7 @@ export default function FileUploader({
           )}
         >
           <div className="flex flex-col items-center justify-center space-y-2">
-            <span className="text-3xl">{accept === 'image' ? '🖼️' : '📄'}</span>
+            <span className="text-primary-500 flex justify-center"><IconUpload size={32} /></span>
             <p className="text-sm text-gray-600 font-medium">
               Tarik dan lepas file di sini atau <span className="text-primary-500">Pilih File</span>
             </p>
@@ -173,8 +174,8 @@ export default function FileUploader({
                 <img src={preview} alt="Preview" className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className="w-12 h-12 shrink-0 bg-gray-100 rounded flex items-center justify-center text-2xl">
-                📄
+              <div className="w-12 h-12 shrink-0 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                <IconFile size={24} />
               </div>
             )}
             
@@ -201,7 +202,7 @@ export default function FileUploader({
                 <span className="text-sm text-gray-500 animate-pulse">{progress}%</span>
               )}
               {status === 'success' && (
-                <span className="text-green-500 text-xl" title="Berhasil">✅</span>
+                <span className="text-green-500" title="Berhasil"><IconCheck size={20} /></span>
               )}
               {status === 'success' && (
                 <button

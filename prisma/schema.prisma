@@ -8,13 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  nama      String
-  email     String   @unique
-  password  String
-  role      String   @default("SISWA") // PENGAJAR | SISWA
-  createdAt DateTime @default(now())
-  kelas     Kelas[]
+  id                String       @id @default(uuid())
+  nama              String
+  email             String       @unique
+  password          String
+  role              String       @default("SISWA") // PENGAJAR | SISWA
+  createdAt         DateTime     @default(now())
+  kelas             Kelas[]
+  kelasDiikuti      Kelas[]      @relation("KelasSiswa")
+  submissions       Submission[]
+  gradedSubmissions Submission[] @relation("GradedBy")
 }
 
 model Kelas {
@@ -26,6 +29,7 @@ model Kelas {
   kode          String       @unique
   pengajarId    String
   pengajar      User         @relation(fields: [pengajarId], references: [id])
+  siswa         User[]       @relation("KelasSiswa")
   createdAt     DateTime     @default(now())
   materi        Materi[]
   gambar        Gambar[]
@@ -34,7 +38,7 @@ model Kelas {
 }
 
 model Materi {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   judul     String
   deskripsi String?
   fileUrl   String
@@ -42,8 +46,30 @@ model Materi {
   fileSize  Int
   fileType  String
   kelasId   String
-  kelas     Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  kelas     Kelas   @relation(fields: [kelasId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+model Submission {
+  id           String    @id @default(uuid())
+  assignmentId String
+  assignment   Tugas     @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fileUrl      String
+  fileName     String
+  fileSize     Int       @default(0)
+  submittedAt  DateTime  @default(now())
+  status       String    @default("DIKUMPULKAN") // DIKUMPULKAN | TERLAMBAT | DINILAI
+  score        Int?
+  feedback     String?
+  gradedAt     DateTime?
+  gradedById   String?
+  gradedBy     User?     @relation("GradedBy", fields: [gradedById], references: [id])
+
+  @@unique([assignmentId, studentId])
+  @@index([assignmentId])
+  @@index([studentId])
 }
 
 model Gambar {
@@ -59,15 +85,16 @@ model Gambar {
 }
 
 model Tugas {
-  id        String    @id @default(uuid())
-  judul     String
-  deskripsi String
-  deadline  DateTime?
-  fileUrl   String?
-  fileName  String?
-  kelasId   String
-  kelas     Kelas     @relation(fields: [kelasId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
+  id          String       @id @default(uuid())
+  judul       String
+  deskripsi   String
+  deadline    DateTime?
+  fileUrl     String?
+  fileName    String?
+  kelasId     String
+  kelas       Kelas        @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  submissions Submission[]
 }
 
 model Pengumuman {

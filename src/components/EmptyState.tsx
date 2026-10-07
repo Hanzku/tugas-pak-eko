@@ -1,5 +1,5 @@
 interface EmptyStateProps {
-  icon?: string;
+  icon?: React.ReactNode;
   title: string;
   description?: string;
   message?: string;
@@ -10,11 +10,11 @@ interface EmptyStateProps {
   };
 }
 
-export default function EmptyState({ icon = '📭', title, description, message, action }: EmptyStateProps) {
+export default function EmptyState({ icon, title, description, message, action }: EmptyStateProps) {
   const textDesc = description || message;
   return (
     <div className="w-full py-12 px-4 flex flex-col items-center justify-center text-center bg-gray-50 border border-gray-200 border-dashed rounded-lg">
-      <span className="text-5xl mb-4">{icon}</span>
+      {icon && <div className="mb-4 flex justify-center">{icon}</div>}
       <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
       {textDesc && (
         <p className="text-sm text-gray-500 max-w-sm mb-6">{textDesc}</p>

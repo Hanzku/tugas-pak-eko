@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import ClassCard from '@/components/ClassCard'
 import EmptyState from '@/components/EmptyState'
+import { IconMateri, IconTugas, IconPengumuman } from '@/components/icons/DiampuIcons'
 
 export const dynamic = 'force-dynamic';
 
@@ -41,17 +42,17 @@ export default async function Home() {
           <h2 className="text-2xl font-bold text-center mb-10 text-gray-800">Fitur Platform</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm text-center">
-              <div className="text-4xl mb-4">📚</div>
+              <div className="text-primary-500 flex justify-center mb-4"><IconMateri size={40} /></div>
               <h3 className="text-lg font-semibold mb-2">Materi Pembelajaran</h3>
               <p className="text-gray-600">Akses materi pembelajaran kapan saja dan di mana saja</p>
             </div>
             <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm text-center">
-              <div className="text-4xl mb-4">📋</div>
+              <div className="text-primary-500 flex justify-center mb-4"><IconTugas size={40} /></div>
               <h3 className="text-lg font-semibold mb-2">Tugas & Penilaian</h3>
               <p className="text-gray-600">Kelola tugas dan pantau perkembangan siswa</p>
             </div>
             <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm text-center">
-              <div className="text-4xl mb-4">📢</div>
+              <div className="text-primary-500 flex justify-center mb-4"><IconPengumuman size={40} /></div>
               <h3 className="text-lg font-semibold mb-2">Pengumuman</h3>
               <p className="text-gray-600">Informasi terbaru langsung dari pengajar</p>
             </div>

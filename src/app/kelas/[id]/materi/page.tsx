@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Sidebar from '@/components/Sidebar';
-import { formatFileSize, formatDate, getFileIcon } from '@/lib/utils';
+import { formatFileSize, formatDate } from '@/lib/utils';
 import { Materi, Kelas } from '@/types';
 import { Download, Plus, File as FileIcon } from 'lucide-react';
 
@@ -144,8 +144,8 @@ export default function MateriPage({ params }: { params: { id: string } }) {
               materiList.map((materi) => (
                 <div key={materi.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="text-3xl mt-1">
-                      {getFileIcon(materi.fileType || '')}
+                    <div className="p-2 bg-primary-50 text-primary-600 rounded-lg mt-0.5">
+                      <FileIcon size={22} />
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg text-gray-900">{materi.judul}</h3>

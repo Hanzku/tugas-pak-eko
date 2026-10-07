@@ -8,6 +8,18 @@ export interface User {
   createdAt: Date
 }
 
+export interface TugasSiswa {
+  tugasId: string
+  kelasId: string
+  kelasNama: string
+  judul: string
+  deadline: string | null
+  submittedAt: string | null
+  status: 'DIKUMPULKAN' | 'TERLAMBAT' | 'DINILAI' | null
+  score: number | null
+  feedback: string | null
+}
+
 export interface Kelas {
   id: string
   nama: string
@@ -58,6 +70,36 @@ export interface Tugas {
   fileName: string | null
   kelasId: string
   createdAt: Date
+}
+
+export interface Submission {
+  id: string
+  assignmentId: string
+  studentId: string
+  fileUrl: string
+  fileName: string
+  fileSize: number
+  submittedAt: string
+  status: string // DIKUMPULKAN | TERLAMBAT | DINILAI
+  score: number | null
+  feedback: string | null
+  gradedAt: string | null
+  gradedById: string | null
+  student?: {
+    id: string
+    nama: string
+    email: string
+  }
+}
+
+export interface TugasGuru extends Tugas {
+  kelas: {
+    id: string
+    nama: string
+    mataPelajaran: string
+  }
+  jumlahSubmission: number
+  jumlahDinilai: number
 }
 
 export interface Pengumuman {

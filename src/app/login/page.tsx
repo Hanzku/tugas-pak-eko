@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -91,6 +92,13 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
+
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Belum punya akun?{' '}
+          <Link href="/register" className="text-primary-600 hover:underline font-medium">
+            Daftar di sini
+          </Link>
+        </p>
 
         <div className="mt-8 bg-gray-100 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
           <p className="font-semibold mb-2 text-gray-800">Akun Demo:</p>

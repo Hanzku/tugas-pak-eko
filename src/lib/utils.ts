@@ -26,18 +26,38 @@ export function formatDateTime(date: Date | string): string {
   })
 }
 
-export function getFileIcon(fileType: string): string {
-  if (fileType.includes('pdf')) return '📄'
-  if (fileType.includes('word') || fileType.includes('docx')) return '📝'
-  if (fileType.includes('presentation') || fileType.includes('pptx')) return '📊'
-  if (fileType.includes('spreadsheet') || fileType.includes('xlsx')) return '📈'
-  if (fileType.includes('zip') || fileType.includes('compressed')) return '📦'
-  if (fileType.includes('image')) return '🖼️'
-  return '📎'
-}
-
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
+}
+
+// Format file submission yang diizinkan (selaras dengan validasi server)
+export const SUBMISSION_EXTENSIONS = ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx', '.zip', '.jpg', '.jpeg', '.png']
+export const MAX_SUBMISSION_SIZE = 20 * 1024 * 1024 // 20MB
+
+export function isValidSubmissionFile(file: File): boolean {
+  const parts = file.name.split('.')
+  const ext = parts.length > 1 ? '.' + parts[parts.length - 1].toLowerCase() : ''
+  return SUBMISSION_EXTENSIONS.includes(ext)
+}
+
+// Format tanggal + jam dengan timezone Asia/Jakarta
+export function formatDateTimeWIB(date: Date | string): string {
+  const d = new Date(date)
+  return (
+    d.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'Asia/Jakarta',
+    }) +
+    ', ' +
+    d.toLocaleTimeString('id-ID', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Asia/Jakarta',
+    }) +
+    ' WIB'
+  )
 }
 
 export function generateKode(): string {

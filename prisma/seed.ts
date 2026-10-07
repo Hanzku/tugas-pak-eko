@@ -7,6 +7,7 @@ async function main() {
   console.log('Seeding database...')
 
   // Clean existing data
+  await prisma.submission.deleteMany()
   await prisma.pengumuman.deleteMany()
   await prisma.tugas.deleteMany()
   await prisma.gambar.deleteMany()
@@ -35,7 +36,7 @@ async function main() {
     },
   })
 
-  // Create Kelas
+  // Create Kelas (siswa ikut kelas1)
   const kelas1 = await prisma.kelas.create({
     data: {
       nama: 'Kelas 10-A',
@@ -44,6 +45,7 @@ async function main() {
       kode: 'MTK10A',
       deskripsi: 'Kelas Matematika untuk siswa kelas 10 program IPA',
       pengajarId: pengajar.id,
+      siswa: { connect: [{ id: siswa.id }] },
     },
   })
 

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link';
+import { IconMateri, IconGaleri, IconTugas, IconPengumuman, IconKelas } from './icons/DiampuIcons';
 
 interface SidebarProps {
   kelasId: string;
@@ -9,11 +10,11 @@ interface SidebarProps {
 
 export default function Sidebar({ kelasId, activeTab }: SidebarProps) {
   const tabs = [
-    { id: 'informasi', label: 'Informasi', href: `/kelas/${kelasId}` },
-    { id: 'materi', label: 'Materi', href: `/kelas/${kelasId}/materi` },
-    { id: 'galeri', label: 'Galeri', href: `/kelas/${kelasId}/galeri` },
-    { id: 'tugas', label: 'Tugas', href: `/kelas/${kelasId}/tugas` },
-    { id: 'pengumuman', label: 'Pengumuman', href: `/kelas/${kelasId}/pengumuman` },
+    { id: 'info', label: 'Informasi', href: `/kelas/${kelasId}`, icon: <IconKelas size={18} /> },
+    { id: 'materi', label: 'Materi', href: `/kelas/${kelasId}/materi`, icon: <IconMateri size={18} /> },
+    { id: 'galeri', label: 'Galeri', href: `/kelas/${kelasId}/galeri`, icon: <IconGaleri size={18} /> },
+    { id: 'tugas', label: 'Tugas', href: `/kelas/${kelasId}/tugas`, icon: <IconTugas size={18} /> },
+    { id: 'pengumuman', label: 'Pengumuman', href: `/kelas/${kelasId}/pengumuman`, icon: <IconPengumuman size={18} /> },
   ];
 
   return (
@@ -25,13 +26,14 @@ export default function Sidebar({ kelasId, activeTab }: SidebarProps) {
             <Link
               key={tab.id}
               href={tab.href}
-              className={`px-4 py-2.5 rounded-md text-sm font-medium transition-colors ${
+              className={`px-4 py-2.5 rounded-md text-sm font-medium transition-colors flex items-center gap-2.5 ${
                 activeTab === tab.id
                   ? 'bg-[#1e3a5f] text-white'
                   : 'text-gray-700 hover:bg-gray-100 hover:text-[#1e3a5f]'
               }`}
             >
-              {tab.label}
+              {tab.icon}
+              <span>{tab.label}</span>
             </Link>
           ))}
         </nav>
@@ -50,7 +52,7 @@ export default function Sidebar({ kelasId, activeTab }: SidebarProps) {
                   : 'text-gray-700 bg-gray-50 border border-gray-200 hover:bg-gray-100'
               }`}
             >
-              {tab.label}
+              <span className="flex items-center gap-1.5">{tab.icon}{tab.label}</span>
             </Link>
           ))}
         </nav>

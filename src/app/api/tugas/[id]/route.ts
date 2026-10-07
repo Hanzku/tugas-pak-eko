@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { getAuth } from '@/lib/serverAuth'
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -27,8 +28,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session || session.user.role !== 'PENGAJAR') {
+    const auth = await getAuth()
+    if (!auth || auth.role !== 'PENGAJAR') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -38,6 +39,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     if (!existingTugas) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+
+    const kelas = await prisma.kelas.findUnique({ where: { id: existingTugas.kelasId } })
+    if (!kelas || kelas.pengajarId !== auth.userId) {
+      return NextResponse.json({ error: 'Forbidden: Ini bukan kelas yang Anda ampu' }, { status: 403 })
     }
 
     const body = await request.json()
@@ -63,8 +69,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session || session.user.role !== 'PENGAJAR') {
+    const auth = await getAuth()
+    if (!auth || auth.role !== 'PENGAJAR') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -74,6 +80,11 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     if (!tugas) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+
+    const kelas = await prisma.kelas.findUnique({ where: { id: tugas.kelasId } })
+    if (!kelas || kelas.pengajarId !== auth.userId) {
+      return NextResponse.json({ error: 'Forbidden: Ini bukan kelas yang Anda ampu' }, { status: 403 })
     }
 
     await prisma.tugas.delete({

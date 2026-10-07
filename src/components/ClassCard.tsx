@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { IconMateri, IconTugas } from './icons/DiampuIcons';
 
 interface ClassCardProps {
   kelas: any; // Type from @/types ideally, using any here to prevent TS errors if type is complex
@@ -34,10 +35,10 @@ export default function ClassCard({ kelas }: ClassCardProps) {
             
             <div className="flex space-x-3 text-xs text-gray-500 font-medium">
               <span className="flex items-center" title="Materi">
-                📄 {materiCount}
+                <IconMateri size={14} className="mr-1" /> {materiCount}
               </span>
               <span className="flex items-center" title="Tugas">
-                📝 {tugasCount}
+                <IconTugas size={14} className="mr-1" /> {tugasCount}
               </span>
             </div>
           </div>

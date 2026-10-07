@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import { DiampuLogo } from './icons/DiampuIcons';
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -14,7 +15,7 @@ export default function Navbar() {
         {/* Left side */}
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-2 text-xl font-bold text-primary-500">
-            <span>🎓</span>
+            <DiampuLogo size={30} />
             <span>DIAMPU</span>
           </Link>
           <div className="hidden md:flex space-x-6">
@@ -39,12 +40,20 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md font-medium transition-colors"
-            >
-              Masuk
-            </Link>
+            <>
+              <Link
+                href="/login"
+                className="text-gray-700 hover:text-primary-500 font-medium px-3 py-2 transition-colors"
+              >
+                Masuk
+              </Link>
+              <Link
+                href="/register"
+                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md font-medium transition-colors"
+              >
+                Daftar
+              </Link>
+            </>
           )}
         </div>
 
@@ -86,13 +95,22 @@ export default function Navbar() {
                 </div>
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="bg-primary-500 hover:bg-primary-600 text-white text-center px-4 py-2 rounded-md font-medium transition-colors mt-2 block"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Masuk
-              </Link>
+              <div className="flex flex-col space-y-2 mt-2">
+                <Link
+                  href="/login"
+                  className="text-center text-gray-700 hover:text-primary-500 font-medium px-4 py-2 border border-gray-200 rounded-md transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Masuk
+                </Link>
+                <Link
+                  href="/register"
+                  className="bg-primary-500 hover:bg-primary-600 text-white text-center px-4 py-2 rounded-md font-medium transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Daftar
+                </Link>
+              </div>
             )}
           </div>
         </div>

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { saveFile } from '@/lib/storage'
+import { getAuth } from '@/lib/serverAuth'
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,8 +28,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session || session.user.role !== 'PENGAJAR') {
+    const auth = await getAuth()
+    if (!auth || auth.role !== 'PENGAJAR') {
       return NextResponse.json({ error: 'Unauthorized: Hanya Pengajar yang dapat membuat tugas' }, { status: 401 })
     }
 
@@ -44,6 +45,12 @@ export async function POST(request: NextRequest) {
 
       if (!kelasId || !judul) {
         return NextResponse.json({ error: 'kelasId dan judul tugas wajib diisi' }, { status: 400 })
+      }
+
+      // Authorization: guru hanya boleh membuat tugas di kelas yang diampunya
+      const kelas = await prisma.kelas.findUnique({ where: { id: kelasId } })
+      if (!kelas || kelas.pengajarId !== auth.userId) {
+        return NextResponse.json({ error: 'Forbidden: Ini bukan kelas yang Anda ampu' }, { status: 403 })
       }
 
       let fileUrl: string | null = null
@@ -73,6 +80,11 @@ export async function POST(request: NextRequest) {
 
       if (!judul || !kelasId) {
         return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      }
+
+      const kelas = await prisma.kelas.findUnique({ where: { id: kelasId } })
+      if (!kelas || kelas.pengajarId !== auth.userId) {
+        return NextResponse.json({ error: 'Forbidden: Ini bukan kelas yang Anda ampu' }, { status: 403 })
       }
 
       const newTugas = await prisma.tugas.create({

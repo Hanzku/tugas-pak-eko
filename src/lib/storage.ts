@@ -9,11 +9,12 @@ export interface SavedFile {
   fileSize: number
 }
 
-export async function saveFile(file: File): Promise<SavedFile> {
+export async function saveFile(file: File, directory: string = 'uploads'): Promise<SavedFile> {
+  const safeDir = directory.replace(/[^a-zA-Z0-9\/_-]/g, '')
   const uniqueFilename = `${uuidv4()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const blob = await put(`uploads/${uniqueFilename}`, file, {
+    const blob = await put(`${safeDir}/${uniqueFilename}`, file, {
       access: 'public',
     })
     return {
@@ -22,7 +23,7 @@ export async function saveFile(file: File): Promise<SavedFile> {
       fileSize: file.size,
     }
   } else {
-    const uploadDir = path.join(process.cwd(), 'public/uploads')
+    const uploadDir = path.join(process.cwd(), 'public', safeDir)
     await mkdir(uploadDir, { recursive: true })
     const filePath = path.join(uploadDir, uniqueFilename)
     const bytes = await file.arrayBuffer()
